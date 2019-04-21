@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>New Post</h1>
+
+<form action="/newpost.html", method='POST'> <!-- action='/newpost' -->
+
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input class="form-control" name="blog_title" type="text" value="{{ blog_title }}"/>
+    </div>
+    <!-- deleted value in input above-->
+    <div class="form-group">
+        <label for="body">Body</label>
+        <textarea class="form-control" name="blog_body" type="text" value="{{ blog_body }}"></textarea>
+    </div>
+    <!-- deleted value in input above-->
+    <input type="submit" value="Add Post" class="btn btn-default"/>
+
+</form>
+
+<h2>Newest Blog Post</h2>
+
+<ul class="list-group">    
+
+        <li class="list-group-item">
+            <h4>{{ new_blog[0] }}</h4>
+                
+            {{ new_blog[1] }}
+        </li>
+
+</ul>
+
+{% endblock %}
