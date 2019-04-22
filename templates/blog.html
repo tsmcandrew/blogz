@@ -15,7 +15,9 @@
             {% for blog in existing_blogs %}
 
             <li class="list-group-item">
-                <h4>{{ blog.blog_title }}</h4>
+                <a href="/id_blog.html?id={{blog.id}}" target='_blank'> 
+                    <h4>{{ blog.blog_title }}</h4>
+                </a>
                 
                 {{ blog.blog_body }}
             </li>

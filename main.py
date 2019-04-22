@@ -119,23 +119,47 @@ def newpost():
         new_blog.append(blog_title)
         new_blog.append(blog_body)
         newest_blog = Blog.query.order_by(Blog.blog_date).limit(1).all
-
+        
+        # add code to test if blog entry, body & title, are empty. Return error message and newpost form. 
         if blog_title == '' or blog_body == '': 
             title_error = 'Oops! You forgot to input a Title for your piece.'
-            blog_error = 'Oops! You forgot to jot down your next masterpiece.'
+            body_error = 'Oops! You forgot to jot down your next masterpiece.'
 
-            return render_template(blog_title=blog_title, blog_body=blog_body, 
+            return render_template('/newpost.html', blog_title=blog_title, blog_body=blog_body, 
             newest_blog=newest_blog, title_error=title_error, body_error=body_error)
 
-        #existing_blogs = Blog.query.all()
-        return redirect('/blog.html') #, existing_blogs=existing_blogs)
-# add code to test if blog entry, body & title, are empty. Return error message and newpost form. 
+        id = request.args.get('id')
+        return render_template('/id_blog.html', 
+            id=id, blog_title=blog_title, blog_body=blog_body) 
+        
 
     else:  
         
         newest_blog = Blog.query.order_by(Blog.blog_date).limit(1).all
         return render_template('/newpost.html', newest_blog=newest_blog)
 
+
+@app.route('/id_blog.html', methods=['GET'])
+def individual_blog():
+    id = request.args.get('id')
+    individual_blog = Blog.query.get(id)
+    blog_title = individual_blog.blog_title
+    blog_body = individual_blog.blog_body
+    
+        
+    return render_template('/id_blog.html',  
+            blog_title=blog_title, blog_body=blog_body)
+        
+    
+
+    #blog_date = request.form['blog_date']
+
+
+
+    
+    
+    #return render_template('/id_blog.html',  
+    #blog_title=blog_title, blog_body=blog_body)
 
 if __name__ == '__main__':
     app.run()
