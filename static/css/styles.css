@@ -8,3 +8,8 @@
 .glyphicon-remove {
     color: red;
 }
+
+.error {
+    font-style: italic;
+    color: red;
+    }

@@ -15,7 +15,8 @@
             {% for blog in existing_blogs %}
 
             <li class="list-group-item">
-                <a href="/id_blog.html?id={{blog.id}}" target='_blank'> 
+                <a href="/blog?id={{ blog.id }}"> 
+                    
                     <h4>{{ blog.blog_title }}</h4>
                 </a>
                 
@@ -23,9 +24,12 @@
             </li>
 
             {% endfor %}
+            
         </ul>
 
     {% endif %}
+
+    
 
     <!-- 
         
@@ -42,23 +46,5 @@
     {% endif %}
     
     -->
-<!--
-    <h3>New post</h3> -->
-
-   <!-- <form action="/blog.html", method='POST'> <!-- action='/newpost' -->
-
-   <!-- <div class="form-group">
-            <label for="title">Title</label>
-            <input class="form-control" name="blog_title" type="text" value="{{ blog_title }}"/>
-        </div> -->
-        <!-- deleted value in input above-->
-   <!-- <div class="form-group">
-            <label for="body">Body</label>
-            <textarea class="form-control" name="blog_body" type="text" value="{{ blog_body }}"></textarea>
-        </div> -->
-        <!-- deleted value in input above-->
-    <!--    <input type="submit" value="Add Post" class="btn btn-default"/>
-
-    </form> -->
 
 {% endblock %}

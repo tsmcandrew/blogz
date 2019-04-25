@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 
 class Blog(db.Model):
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     blog_title = db.Column(db.String(120))
     blog_body = db.Column(db.String(500))
     blog_date = db.Column(db.DateTime, nullable=False,
@@ -88,78 +88,84 @@ def logout():
     return redirect('/')"""
 
 
-@app.route('/blog.html', methods=['POST', 'GET'])
+@app.route('/blog', methods=['POST', 'GET'])
 def index():
-    
-    if request.method == 'POST':
-        blog_title = request.form['blog_title']
-        blog_body = request.form['blog_body']
-        #blog_date = request.form['blog_date']
-        newpost = Blog(blog_title, blog_body)
-        db.session.add(newpost)
-        db.session.commit()
-
-    
     existing_blogs = Blog.query.all()
-    return render_template('/blog.html', existing_blogs=existing_blogs)
+    return render_template('blog.html', existing_blogs=existing_blogs)
 
-@app.route('/newpost.html', methods=['GET', 'POST'])
-def newpost(): 
-    new_blog = []
-    title_error = '' 
-    blog_error = '' 
 
     if request.method == 'POST':
+        blog_title = request.form['blog_title']
+        blog_body = request.form['blog_body']
+
+        existing_blogs = Blog.query.all()
+        
+        return render_template('blog.html', blog_title=blog_title, blog_body=blog_body, existing_blogs=existing_blogs)
+
+    elif request.method != 'POST': 
+
+        blog_id = request.args.get('blog.id')
+        return redirect('/blog?id={0}'.format(blog_id))
+    
+    else: 
+        existing_blogs = Blog.query.all()
+        return render_template('blog.html', existing_blogs=existing_blogs)
+    
+    
+     
+
+
+@app.route('/blog', methods=['GET', 'POST'])
+def individual_blog():
+    blog_id = request.args.get(id)
+        
+    return render_template('id_blog.html')
+    
+    #blog_id = request.args.get(id)
+    #individual_blog = Blog.query.filter_by(id = blog_id).all()
+    #blog_title = individual_blog.blog_title
+    #blog_body = individual_blog.blog_body
+    #blog_title = request.form['blog_title']
+    #blog_body = request.form['blog_body']
+
+        
+    
+
+
+@app.route('/newpost', methods=['GET', 'POST'])
+def newpost(): 
+    
+    if request.method == 'POST':
+        
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
         #blog_date = request.form['blog_date']
         newpost = Blog(blog_title, blog_body)
         db.session.add(newpost)
         db.session.commit()
-        new_blog.append(blog_title)
-        new_blog.append(blog_body)
-        newest_blog = Blog.query.order_by(Blog.blog_date).limit(1).all
+        db.session.flush()
+        blog_id = newpost.id
         
-        # add code to test if blog entry, body & title, are empty. Return error message and newpost form. 
+        
+        # add code to test if blog entry, body & title, are empty. Return error message and newpost form.
+
         if blog_title == '' or blog_body == '': 
+            
             title_error = 'Oops! You forgot to input a Title for your piece.'
             body_error = 'Oops! You forgot to jot down your next masterpiece.'
 
-            return render_template('/newpost.html', blog_title=blog_title, blog_body=blog_body, 
-            newest_blog=newest_blog, title_error=title_error, body_error=body_error)
+            return render_template('newpost.html', blog_title=blog_title, blog_body=blog_body, 
+                title_error=title_error, body_error=body_error)
 
-        id = request.args.get('id')
-        return render_template('/id_blog.html', 
-            id=id, blog_title=blog_title, blog_body=blog_body) 
-        
+        else: 
+            # blog_id = request.args.get('blog.id')
+            blog_id = newpost.id
+            return redirect('/blog?id={0}'.format(blog_id))
 
-    else:  
-        
-        newest_blog = Blog.query.order_by(Blog.blog_date).limit(1).all
-        return render_template('/newpost.html', newest_blog=newest_blog)
+    else: 
+            
+        return render_template('newpost.html')
 
-
-@app.route('/id_blog.html', methods=['GET'])
-def individual_blog():
-    id = request.args.get('id')
-    individual_blog = Blog.query.get(id)
-    blog_title = individual_blog.blog_title
-    blog_body = individual_blog.blog_body
-    
-        
-    return render_template('/id_blog.html',  
-            blog_title=blog_title, blog_body=blog_body)
-        
-    
-
-    #blog_date = request.form['blog_date']
-
-
-
-    
-    
-    #return render_template('/id_blog.html',  
-    #blog_title=blog_title, blog_body=blog_body)
 
 if __name__ == '__main__':
     app.run()
