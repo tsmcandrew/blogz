@@ -90,45 +90,26 @@ def logout():
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
-    existing_blogs = Blog.query.all()
-    return render_template('blog.html', existing_blogs=existing_blogs)
+    #existing_blogs = Blog.query.all()
+    #return render_template('blog.html', existing_blogs=existing_blogs)
+    blog_id = request.args.get('id')
+    print('<p>{0}</p>'.format(blog_id))
 
 
-    if request.method == 'POST':
-        blog_title = request.form['blog_title']
-        blog_body = request.form['blog_body']
-
-        existing_blogs = Blog.query.all()
+    if request.args.get('id') is not None: 
+        #blog_id = request.args.get('id', '')
+        blog = Blog.query.get(blog_id)  
+        blog_title = blog.blog_title
+        blog_body = blog.blog_body
         
-        return render_template('blog.html', blog_title=blog_title, blog_body=blog_body, existing_blogs=existing_blogs)
-
-    elif request.method != 'POST': 
-
-        blog_id = request.args.get('blog.id')
-        return redirect('/blog?id={0}'.format(blog_id))
+        return render_template('id_blog.html', 
+            blog_body=blog_body, blog_title=blog_title, blog_id=blog_id)
     
     else: 
         existing_blogs = Blog.query.all()
-        return render_template('blog.html', existing_blogs=existing_blogs)
-    
-    
-     
-
-
-@app.route('/blog', methods=['GET', 'POST'])
-def individual_blog():
-    blog_id = request.args.get(id)
         
-    return render_template('id_blog.html')
-    
-    #blog_id = request.args.get(id)
-    #individual_blog = Blog.query.filter_by(id = blog_id).all()
-    #blog_title = individual_blog.blog_title
-    #blog_body = individual_blog.blog_body
-    #blog_title = request.form['blog_title']
-    #blog_body = request.form['blog_body']
-
-        
+        return render_template('blog.html', 
+            existing_blogs=existing_blogs)
     
 
 
@@ -158,7 +139,7 @@ def newpost():
                 title_error=title_error, body_error=body_error)
 
         else: 
-            # blog_id = request.args.get('blog.id')
+            
             blog_id = newpost.id
             return redirect('/blog?id={0}'.format(blog_id))
 

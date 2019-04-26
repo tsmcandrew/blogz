@@ -4,18 +4,18 @@
 
     <ul class="list-group">
 
-        {% for blog in existing_blogs %}
+        
 
         <li class="list-group-item">
-            <a href="/blog?id={{ blog.id }}"> 
+            <a href="/blog?id={{ blog_id }}"> 
                 
-                <h4>{{ blog.blog_title }}</h4>
+                <h4>{{ blog_title }}</h4>
             </a>
             
-            {{ blog.blog_body }}
+            {{ blog_body }}
         </li>
 
-        {% endfor %}
+     
         
     </ul>
 
