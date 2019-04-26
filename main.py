@@ -90,14 +90,12 @@ def logout():
 
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
-    #existing_blogs = Blog.query.all()
-    #return render_template('blog.html', existing_blogs=existing_blogs)
-    blog_id = request.args.get('id')
-    print('<p>{0}</p>'.format(blog_id))
 
+    blog_id = request.args.get('id')
+    
 
     if request.args.get('id') is not None: 
-        #blog_id = request.args.get('id', '')
+        
         blog = Blog.query.get(blog_id)  
         blog_title = blog.blog_title
         blog_body = blog.blog_body
@@ -106,7 +104,7 @@ def index():
             blog_body=blog_body, blog_title=blog_title, blog_id=blog_id)
     
     else: 
-        existing_blogs = Blog.query.all()
+        existing_blogs = Blog.query.order_by(Blog.blog_date.desc()).all()
         
         return render_template('blog.html', 
             existing_blogs=existing_blogs)
@@ -120,8 +118,9 @@ def newpost():
         
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
-        #blog_date = request.form['blog_date']
-        newpost = Blog(blog_title, blog_body)
+        # blog_date = request.form['blog_date']
+        newpost = Blog(blog_title, blog_body) 
+        # , blog_date)
         db.session.add(newpost)
         db.session.commit()
         db.session.flush()
