@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Build-A-Blog</title>
+        <title>Blogz</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <style>
@@ -18,18 +18,54 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
         <!-- attempting to link styles.css file to html --
         <link rel="stylesheet" type="text/css" href="./css/styles.css">
         <link href="https://fonts.googleapis.com/css?family=Cormorant+Garamond|Raleway" rel="stylesheet">
         -->
     </head>
 <body>
-
+   
     <div style="display:inline-block;margin-left: 16.5px;font-family:Arial, Helvetica, sans-serif;">
         <a href='/blog'>Home</a>
         or
-        <a href='/newpost'>Add New Post</a>
+        <a href='/signup'>Sign Up</a>
+        or 
+        <a href='/newpost'>Post a Blog</a>
+    </div>
+
+    <nav class="navbar navbar-default">
+        <a href='/' class="navbar-brand">Blog ON!</a>
+        {% if 'username' in session %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-text">{{ session['username'] }}</li>
+            <li>
+                <form method="post" action="/logout">
+                    <button class="btn btn-default navbar-btn">Log Out</button>
+                </form>
+            </li>
+        </ul>
+        {% endif %}
+    </nav>
+    
+    <div class="container">
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}} alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{message|safe}}
+            </div>
+            {% endfor %}
+        {% endwith %}
+        
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+            
+            </div>
+            <div class="col-md-2"></div>
+        </div>
     </div>
 
     {% block content %}
@@ -37,3 +73,7 @@
 
 </body>
 </html>
+
+
+
+
