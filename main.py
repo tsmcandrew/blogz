@@ -50,8 +50,8 @@ def require_login():
 @app.route('/', methods=['GET', 'POST'])        
 def index(): 
     users = User.query.all()
-    
-    return render_template('index.html', users=users)  
+    existing_blogs = Blog.query.all()
+    return render_template('index.html', users=users, existing_blogs=existing_blogs)  
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -124,20 +124,30 @@ def logout():
 def list_blogs():
 
     blog_id = request.args.get('id')
-    #user = User.query.filter_by(username=username).all()
+    blog_user = request.args.get('user')
 
+    if request.args.get('user') is not None:
+        user = User.query.filter_by(username=str(blog_user)).all()
+        user_id = user[0].id
+        user_blogs = Blog.query.select_from(Blog).join(User).filter(Blog.owner_id==user_id).all()
+        username = user[0].username
+        
+        return render_template('singleUser.html', 
+                username=username, user_blogs=user_blogs) #, blog_title=blog_title, blog_body=blog_body, blog_date=blog_date, blog_id=blog_id)
 
-    if request.args.get('id'): 
+    if request.args.get('id') is not None: 
         
         blog = Blog.query.get(blog_id)  
         blog_title = blog.blog_title
         blog_body = blog.blog_body
         owner_id = blog.owner_id
         owner = blog.owner
+        user_name = blog.owner.username
 
         return render_template('id_blog.html', 
-            blog_body=blog_body, blog_title=blog_title, owner_id=owner_id, owner=owner, 
-            blog_id=blog_id)
+            blog_body=blog_body, blog_title=blog_title, 
+            owner_id=owner_id, owner=owner, 
+            blog_id=blog_id, user_name=user_name)
     
     else: 
         existing_blogs = Blog.query.order_by(Blog.blog_date.desc()).all()

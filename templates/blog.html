@@ -17,17 +17,17 @@
             <li class="list-group-item">
                 <a href="/blog?id={{ blog.id }}"> 
                     
-                    <h4>Title: {{blog.blog_title}}  
+                    <h4> Title: {{blog.blog_title}} </h4> 
                         
                 </a>
-                <h5> Author: {{ blog.owner.username }} </h5> 
-                    
-                <h6> Blog Entry #: {{blog.id}}</h6>  
+                                    
+                <h6> Blog Entry #: {{blog.id}} </h6>  
                 
-                <h6>{{ blog.blog_body }}</h6>
+                <h6> {{ blog.blog_body }} </h6>
                 <br /> 
                 <br />
-                <h6>Post Date: {{ blog.blog_date }}</h6>
+                <h6> Author: <a href='/blog?user={{ blog.owner.username }}'> {{ blog.owner.username }}</a></h6>
+                <h6> Post Date: {{ blog.blog_date }} </h6>
             </li>
 
             {% endfor %}

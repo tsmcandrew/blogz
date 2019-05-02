@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h3> List of Authors: </h3>
+
+    <ul class="list-group">
+
+        {% for user in users %}
+           
+                <li class="list-group-item">
+                
+                    <a href="/blog?user={{ user.username }}"> 
+                                
+                        <h5> Author: {{ user.username }} </h5> 
+                        
+                    </a>
+                    
+                </li>   
+            
+        {% endfor %}
+            
+    </ul>
+
+{% endblock %}    
