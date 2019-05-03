@@ -129,11 +129,11 @@ def list_blogs():
     if request.args.get('user') is not None:
         user = User.query.filter_by(username=str(blog_user)).all()
         user_id = user[0].id
-        user_blogs = Blog.query.select_from(Blog).join(User).filter(Blog.owner_id==user_id).all()
+        user_blogs = Blog.query.join(User).filter(Blog.owner_id==user_id).all()
         username = user[0].username
         
         return render_template('singleUser.html', 
-                username=username, user_blogs=user_blogs) #, blog_title=blog_title, blog_body=blog_body, blog_date=blog_date, blog_id=blog_id)
+                username=username, user_blogs=user_blogs)
 
     if request.args.get('id') is not None: 
         
@@ -180,7 +180,8 @@ def newpost():
             #title_error = 'Oops! You forgot to input a Title for your piece.'
             #body_error = 'Oops! You forgot to jot down your next masterpiece.'
 
-            return render_template('newpost.html', blog_title=blog_title, blog_body=blog_body)
+            return render_template('newpost.html', 
+                blog_title=blog_title, blog_body=blog_body)
 
         else: 
             
